@@ -8,20 +8,29 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.projetassociation.Entities.Adherent;
+import com.example.projetassociation.Entities.Sorties;
 import com.example.projetassociation.Fragments.HomeFragment;
 import com.example.projetassociation.Fragments.SortiesFragment;
+import com.example.projetassociation.Utilities.Constants;
 import com.example.projetassociation.Utilities.Functions;
 import com.example.projetassociation.Utilities.Session;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -83,9 +92,13 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.action_compte:
                 index = 0;
+                fragment = (HomeFragment)fragments.get(index);
+                homeFragment.setAdherent(adherent); // fonctionne pas
                 break;
             case R.id.action_sorties:
                 index = 1;
+                AsyncCallWS asyncCallWS = new AsyncCallWS(adherent.getIdAssociation());
+                asyncCallWS.execute();
                 break;
         }
 
@@ -135,5 +148,72 @@ public class HomeActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.frm_home, fragment)
                 .commit();
+    }
+
+    private class AsyncCallWS extends AsyncTask<String, Integer, String> {
+
+        private final int idAssociation;
+
+        public AsyncCallWS(int idAssociation) {
+            this.idAssociation = idAssociation;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            return callServiceWeb(this.idAssociation);
+        }
+
+        @Override
+        protected void onPostExecute(String retourServiceWeb) {
+            super.onPostExecute(retourServiceWeb);
+            //Functions.getToast(context, retourServiceWeb);
+
+            if (!retourServiceWeb.isEmpty()) {
+                try {
+                    Gson gson = new Gson();
+
+                    //Matching du flux json qui vient du service web en objet Sorties
+                    Sorties sorties = gson.fromJson(retourServiceWeb,Sorties.class);
+                    sortiesFragment.loadSorties(sorties, context);
+
+                } catch (Exception ex) {
+                    Log.e("Erreur service web", ex.getMessage());
+                }
+            }
+        }
+    }
+
+    private String callServiceWeb(int idAssociation) {
+        String url = Constants.urlSW + "GetSorties";
+        OkHttpClient client = new OkHttpClient();
+        String result = "";
+
+        //Request request = new Request.Builder().url(url).build();
+
+        HttpUrl.Builder httpBuider = HttpUrl.parse(url).newBuilder();
+        httpBuider.addQueryParameter("idAssociation", "" + idAssociation);
+
+
+        try {
+            Request request = new Request.Builder().url(httpBuider.build()).build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.isSuccessful()) {
+                // on récupère au format Json
+                result = response.body().string();
+            }
+
+        } catch (Exception ex) {
+            result = ex.getMessage();
+            Log.e("Erreur service web", result);
+        }
+
+        return result;
     }
 }

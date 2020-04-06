@@ -17,6 +17,8 @@ import com.example.projetassociation.R;
  */
 public class HomeFragment extends Fragment {
 
+    Adherent adherent;
+
     TextView txtNom;
     TextView txtPrenom;
     TextView txtEmail;
@@ -44,6 +46,13 @@ public class HomeFragment extends Fragment {
     }
 
     public void setAdherent(Adherent adherent) {
+        this.adherent = adherent;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         txtNom.setText("Votre nom : " + adherent.getNom());
         txtPrenom.setText("Votre prénom : " + adherent.getPrenom());
         txtEmail.setText("Votre email : " + adherent.getEmail());
