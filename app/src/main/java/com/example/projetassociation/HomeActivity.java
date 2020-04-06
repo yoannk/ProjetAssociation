@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     SortiesFragment sortiesFragment;
     HomeFragment homeFragment;
     int index;
+    Adherent adherent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         context = this;
 
-        Adherent adherent = Session.getAdherent();
+        adherent = Session.getAdherent();
 
         //Functions.getToast(this, adherent.getNom() + " : " + Session.getId());
 
@@ -55,6 +56,12 @@ public class HomeActivity extends AppCompatActivity {
         // Fragment de démarrage
         index = 0;
         replaceFragment(homeFragment);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        homeFragment.setAdherent(adherent);
     }
 
     @Override

@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.SortiesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcwSorties"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Sorties" />
-
+        android:visibility="visible" />
 </FrameLayout>
