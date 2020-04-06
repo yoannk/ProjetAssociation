@@ -4,18 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.projetassociation.Entities.Adherent;
 import com.example.projetassociation.Utilities.Functions;
+import com.example.projetassociation.Utilities.ServiceWeb;
 import com.example.projetassociation.Utilities.Session;
 import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -51,10 +52,6 @@ public class MainActivity extends AppCompatActivity {
         final EditText txtLogin = findViewById(R.id.txtLogin);
         final EditText txtPassword = findViewById(R.id.txtPassword);
 
-
-        // http://www.claudehenry.fr/serviceweb/getassociations
-        // http://www.claudehenry.fr/serviceweb/getid
-
         Button btnConnexion = findViewById(R.id.btnConnexion);
 
         btnConnexion.setOnClickListener(new View.OnClickListener() {
@@ -63,119 +60,55 @@ public class MainActivity extends AppCompatActivity {
                 String login = txtLogin.getText().toString().trim();
                 String password = txtPassword.getText().toString().trim();
 
-                if (!login.isEmpty() && !password.isEmpty()) {
-                    // Appel du service web via une tache asynchrone ()
-                    AsyncCallWS asyncCallWS = new AsyncCallWS(login, password);
-                    asyncCallWS.execute();
-                } else {
+                if (login.isEmpty() || password.isEmpty()) {
                     Functions.getToast(context, "Veuillez saisir vos identifiants");
+                    return;
                 }
-            }
-        });
-    }
 
-    private class AsyncCallWS extends AsyncTask<String, Integer, String> {
-
-        private final String login;
-        private final String password;
-
-        public AsyncCallWS(String login, String password) {
-            this.login = login;
-            this.password = password;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            return callServiceWeb(this.login, this.password);
-        }
-
-        @Override
-        protected void onPostExecute(String retourServiceWeb) {
-            super.onPostExecute(retourServiceWeb);
-            //Functions.getToast(context, retourServiceWeb);
-
-            if (!retourServiceWeb.isEmpty()) {
-                try {
-                    Gson gson = new Gson();
-                    Adherent adherent = gson.fromJson(retourServiceWeb, Adherent.class);
-
-                    // Ajoute un adherent à ma session
-                    Session.setAdherent(adherent);
-                    Session.setId(sessionId);
-
-                    // redirige vers notre activity principale
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-
-                } catch (Exception ex) {
-                    Log.e("Erreur service web", ex.getMessage());
-                }
-            }
-        }
-    }
-
-    private String callServiceWeb(String login, String password) {
-        String url = "http://www.claudehenry.fr/serviceweb/LoginAdherent"; // login:tt password:tt
-        OkHttpClient client = new OkHttpClient();
-        String result = "";
-
-        //Request request = new Request.Builder().url(url).build();
-
-        HttpUrl.Builder httpBuider = HttpUrl.parse(url).newBuilder();
-        httpBuider.addQueryParameter("login", login);
-        httpBuider.addQueryParameter("password", password);
-
-
-        try {
-            Request request = new Request.Builder().url(httpBuider.build()).build();
-
-            Response response = client.newCall(request).execute();
-
-            if (response.isSuccessful()) {
-                result = response.body().string();
-            }
-
-        } catch (Exception ex) {
-            result = ex.getMessage();
-            Log.e("Erreur service web", result);
-        }
-
-        return result;
-    }
-
-
-
-    /*public void run() throws Exception {
-        Request request = new Request.Builder()
-                .url("http://publicobject.com/helloworld.txt")
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
-                    if (!response.isSuccessful())
-                        throw new IOException("Unexpected code " + response);
-
-                    Headers responseHeaders = response.headers();
-                    for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                        System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                // Appel asynchrone du service web ()
+                ServiceWeb.callLoginAdherent(login, password, new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        call.cancel();
                     }
 
-                    System.out.println(responseBody.string());
-                }
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
+                        final String retourServiceWeb = response.body().string();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!response.isSuccessful()) {
+                                    Functions.getToast(context, "Erreur service web (code " + response.code() + ")");
+                                    return;
+                                }
+
+                                if (retourServiceWeb.equals("\"\"")) {
+                                    Functions.getToast(context, "login ou mot de passe incorrect");
+                                    return;
+                                }
+
+                                try {
+                                    Gson gson = new Gson();
+                                    Adherent adherent = gson.fromJson(retourServiceWeb, Adherent.class);
+
+                                    // Ajoute un adherent à ma session
+                                    Session.setAdherent(adherent);
+                                    Session.setId(sessionId);
+
+                                    // redirige vers notre activity principale
+                                    Intent intent = new Intent(context, HomeActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } catch (Exception ex) {
+                                    Log.e("Erreur MainActivity", ex.getMessage());
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
-    }*/
+    }
 }

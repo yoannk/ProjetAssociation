@@ -148,24 +148,4 @@ public class SortiesFragment extends Fragment {
         rcwSorties.setLayoutManager(layoutManager);
         rcwSorties.setAdapter(recyclerViewAdapter);
     }
-
-    /*
-    RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(sorties);
-
-        //la manière dont les adherents doivent s'afficher
-        RecyclerView.LayoutManager layoutManager =
-                new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-
-        //Version GridView
-        RecyclerView.LayoutManager layoutManager2 = new GridLayoutManager(context, 3);
-
-        rcwSorties.setLayoutManager(layoutManager);
-
-        //Effet sur le recyclerView
-        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
-        rcwSorties.setItemAnimator(defaultItemAnimator);
-
-        //on passe notre adapter à notre recyclerview
-        rcwSorties.setAdapter(recyclerViewAdapter);
-     */
 }
