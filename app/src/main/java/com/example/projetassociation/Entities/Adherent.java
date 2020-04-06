@@ -4,14 +4,11 @@ public class Adherent {
     private String nom;
     private String prenom;
     private int idAssociation;
-
-    public Adherent() {
-    }
-
-    public Adherent(String nom, String prenom) {
-        this.nom = nom;
-        this.prenom = prenom;
-    }
+    private String telephone;
+    private double solde;
+    private String matricule;
+    private String email;
+    private boolean statut;
 
     public String getNom() {
         return nom;
@@ -35,5 +32,45 @@ public class Adherent {
 
     public void setIdAssociation(int idAssociation) {
         this.idAssociation = idAssociation;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public double getSolde() {
+        return solde;
+    }
+
+    public void setSolde(double solde) {
+        this.solde = solde;
+    }
+
+    public String getMatricule() {
+        return matricule;
+    }
+
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isStatut() {
+        return statut;
+    }
+
+    public void setStatut(boolean statut) {
+        this.statut = statut;
     }
 }
