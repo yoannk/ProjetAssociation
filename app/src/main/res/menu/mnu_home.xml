@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_sorties"
+        android:icon="@drawable/ic_action_sorties"
+        android:title="Sorties"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_compte"
+        android:icon="@drawable/ic_action_person"
+        android:title="Compte"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_quitter"
+        android:title="Quitter"
+        app:showAsAction="never" />
+</menu>
