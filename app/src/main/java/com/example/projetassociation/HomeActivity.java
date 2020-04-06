@@ -40,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Adherent adherent = Session.getAdherent();
 
-        Functions.getToast(this, adherent.getNom() + " : " + Session.getId());
+        //Functions.getToast(this, adherent.getNom() + " : " + Session.getId());
 
         if (adherent == null) {
             finish();
@@ -83,6 +83,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         fragment = fragments.get(index);
+        replaceFragment(fragment);
         return true;
     }
 
@@ -126,6 +127,6 @@ public class HomeActivity extends AppCompatActivity {
         // on démarre une transaction pour gérer les differents fragments
         fragmentManager.beginTransaction()
                 .replace(R.id.frm_home, fragment)
-                .hashCode();
+                .commit();
     }
 }
