@@ -19,6 +19,9 @@ public class HomeFragment extends Fragment {
 
     TextView txtNom;
     TextView txtPrenom;
+    TextView txtEmail;
+    TextView txtMobile;
+    TextView txtSolde;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -33,6 +36,9 @@ public class HomeFragment extends Fragment {
 
         txtNom = view.findViewById(R.id.txtNom);
         txtPrenom = view.findViewById(R.id.txtPrenom);
+        txtEmail = view.findViewById(R.id.txtEmail);
+        txtMobile = view.findViewById(R.id.txtMobile);
+        txtSolde = view.findViewById(R.id.txtSolde);
 
         return view;
     }
@@ -40,5 +46,8 @@ public class HomeFragment extends Fragment {
     public void setAdherent(Adherent adherent) {
         txtNom.setText("Votre nom : " + adherent.getNom());
         txtPrenom.setText("Votre prénom : " + adherent.getPrenom());
+        txtEmail.setText("Votre email : " + adherent.getEmail());
+        txtMobile.setText("Votre mobile : " + adherent.getTelephone());
+        txtSolde.setText("Votre solde : " + adherent.getSolde() + " €");
     }
 }
