@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import android.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,21 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.example.projetassociation.Entities.Adherent;
+import com.example.projetassociation.Entities.Sorties;
+import com.example.projetassociation.HomeActivity;
 import com.example.projetassociation.R;
+import com.example.projetassociation.Utilities.Functions;
+import com.example.projetassociation.Utilities.ServiceWeb;
 import com.example.projetassociation.Utilities.Session;
+import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,6 +99,8 @@ public class HomeFragment extends Fragment {
 
                 setData();
 
+                callUpdateAdherent(email, telephone, password);
+
                 // on bascule sur la vue précédente - mode TextView
                 viewSwitcher.showPrevious();
             }
@@ -121,5 +137,31 @@ public class HomeFragment extends Fragment {
         edtEmail.setText(adherent.getEmail());
         edtTelephone.setText(adherent.getTelephone());
         edtPassword.setText("");
+    }
+
+    private void callUpdateAdherent(String email, String telephone, String password) {
+        ServiceWeb.callUpdateAdherent(email, telephone, password, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
+                final String retourServiceWeb = response.body().string();
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!response.isSuccessful()) {
+                            Functions.getToast(getActivity(), "Erreur service web (code " + response.code() + ")");
+                            return;
+                        }
+
+
+                    }
+                });
+            }
+        });
     }
 }
