@@ -5,59 +5,119 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.HomeFragment">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txtNom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nom" />
 
-        <TextView
-            android:id="@+id/txtPrenom"
+        <ViewSwitcher
+            android:id="@+id/viewswitcher"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Prénom" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/txtEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txtMobile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mobile" />
+                <TextView
+                    android:id="@+id/txtNom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nom" />
 
-        <TextView
-            android:id="@+id/txtSolde"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Solde" />
+                <TextView
+                    android:id="@+id/txtPrenom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Prenom" />
 
-        <Switch
-            android:id="@+id/swhCompte"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Etat Compte" />
+                <TextView
+                    android:id="@+id/txtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email" />
+
+                <TextView
+                    android:id="@+id/txtMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile" />
+
+                <TextView
+                    android:id="@+id/txtSolde"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Solde" />
+
+
+                <Button
+                    android:id="@+id/btnModifier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Modifier" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/edtTelephone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Telephone"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Password"
+                    android:inputType="textPersonName" />
+
+                <Switch
+                    android:id="@+id/swhCompte"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Etat Compte" />
+
+                <Button
+                    android:id="@+id/btnValider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Valider" />
+
+                <Button
+                    android:id="@+id/btnAnnuler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Annuler" />
+
+
+            </LinearLayout>
+
+        </ViewSwitcher>
 
         <Button
-            android:id="@+id/btnModifier"
+            android:id="@+id/btnCrediterCompte"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Modifier" />
-
-        <Button
-            android:id="@+id/btncrediterCompte"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Créditer compte" />
+            android:text="Crediter Compte" />
     </LinearLayout>
+
 </FrameLayout>
