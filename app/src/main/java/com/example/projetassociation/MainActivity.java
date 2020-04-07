@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void callLoginAdherent(String login, String password) {
-        ServiceWeb.callLoginAdherent(login, password, new Callback() {
+        ServiceWeb.callLoginAdherent(login, password, sessionId, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 call.cancel();

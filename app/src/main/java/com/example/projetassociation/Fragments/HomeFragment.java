@@ -1,5 +1,7 @@
 package com.example.projetassociation.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.app.Fragment;
@@ -52,6 +54,7 @@ public class HomeFragment extends Fragment {
     Button btnModifier;
     Button btnValider;
     Button btnAnnuler;
+    Button btnCrediterCompte;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -107,6 +110,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btnCrediterCompte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         return view;
     }
 
@@ -149,6 +159,7 @@ public class HomeFragment extends Fragment {
         btnModifier = view.findViewById(R.id.btnModifier);
         btnValider = view.findViewById(R.id.btnValider);
         btnAnnuler = view.findViewById(R.id.btnAnnuler);
+        btnCrediterCompte = view.findViewById(R.id.btnCrediterCompte);
     }
 
     private void callUpdateAdherent(int idAdherent, String email, String telephone, String password) {

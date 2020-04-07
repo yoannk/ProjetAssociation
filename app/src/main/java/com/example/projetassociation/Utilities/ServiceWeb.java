@@ -22,13 +22,14 @@ public class ServiceWeb {
         client.newCall(request).enqueue(callback);
     }
 
-    public static void callLoginAdherent(String login, String password, Callback callback) {
+    public static void callLoginAdherent(String login, String password, String idSession, Callback callback) {
         String url = Constants.urlSW + "LoginAdherent";
 
         // POST request
         RequestBody formBody = new FormBody.Builder()
                 .add("login", login)
                 .add("password", password)
+                .add("idsession", idSession)
                 .build();
 
         Request request = new Request.Builder()
