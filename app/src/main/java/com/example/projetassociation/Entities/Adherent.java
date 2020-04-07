@@ -3,6 +3,7 @@ package com.example.projetassociation.Entities;
 public class Adherent {
     private String nom;
     private String prenom;
+    private int idAdherent;
     private int idAssociation;
     private String telephone;
     private double solde;
@@ -24,6 +25,14 @@ public class Adherent {
 
     public void setPrenom(String prenom) {
         this.prenom = prenom;
+    }
+
+    public int getIdAdherent() {
+        return idAdherent;
+    }
+
+    public void setIdAdherent(int idAdherent) {
+        this.idAdherent = idAdherent;
     }
 
     public int getIdAssociation() {

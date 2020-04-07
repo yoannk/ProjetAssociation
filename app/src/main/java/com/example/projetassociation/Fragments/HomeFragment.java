@@ -47,6 +47,12 @@ public class HomeFragment extends Fragment {
     EditText edtTelephone;
     EditText edtPassword;
 
+    ViewSwitcher viewSwitcher;
+
+    Button btnModifier;
+    Button btnValider;
+    Button btnAnnuler;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -58,21 +64,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        txtNom = view.findViewById(R.id.txtNom);
-        txtPrenom = view.findViewById(R.id.txtPrenom);
-        txtEmail = view.findViewById(R.id.txtEmail);
-        txtMobile = view.findViewById(R.id.txtMobile);
-        txtSolde = view.findViewById(R.id.txtSolde);
-
-        edtEmail = view.findViewById(R.id.edtEmail);
-        edtTelephone = view.findViewById(R.id.edtTelephone);
-        edtPassword = view.findViewById(R.id.edtPassword);
-
-        final ViewSwitcher viewSwitcher = view.findViewById(R.id.viewswitcher);
-
-        Button btnModifier = view.findViewById(R.id.btnModifier);
-        Button btnValider = view.findViewById(R.id.btnValider);
-        Button btnAnnuler = view.findViewById(R.id.btnAnnuler);
+        // Initialisation des widgets
+        initWidgets(view);
 
         btnModifier.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +92,8 @@ public class HomeFragment extends Fragment {
 
                 setData();
 
-                callUpdateAdherent(email, telephone, password);
+                // on enregistre en bdd via le service web
+                callUpdateAdherent(adherent.getIdAdherent(), email, telephone, password);
 
                 // on bascule sur la vue précédente - mode TextView
                 viewSwitcher.showPrevious();
@@ -139,8 +133,26 @@ public class HomeFragment extends Fragment {
         edtPassword.setText("");
     }
 
-    private void callUpdateAdherent(String email, String telephone, String password) {
-        ServiceWeb.callUpdateAdherent(email, telephone, password, new Callback() {
+    private void initWidgets(View view) {
+        txtNom = view.findViewById(R.id.txtNom);
+        txtPrenom = view.findViewById(R.id.txtPrenom);
+        txtEmail = view.findViewById(R.id.txtEmail);
+        txtMobile = view.findViewById(R.id.txtMobile);
+        txtSolde = view.findViewById(R.id.txtSolde);
+
+        edtEmail = view.findViewById(R.id.edtEmail);
+        edtTelephone = view.findViewById(R.id.edtTelephone);
+        edtPassword = view.findViewById(R.id.edtPassword);
+
+        viewSwitcher = view.findViewById(R.id.viewswitcher);
+
+        btnModifier = view.findViewById(R.id.btnModifier);
+        btnValider = view.findViewById(R.id.btnValider);
+        btnAnnuler = view.findViewById(R.id.btnAnnuler);
+    }
+
+    private void callUpdateAdherent(int idAdherent, String email, String telephone, String password) {
+        ServiceWeb.callUpdateAdherent(idAdherent, email, telephone, password, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 call.cancel();

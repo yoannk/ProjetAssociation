@@ -61,47 +61,51 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Appel asynchrone du service web ()
-                ServiceWeb.callLoginAdherent(login, password, new Callback() {
+                // Appel asynchrone du service web LoginAdherent
+                callLoginAdherent(login, password);
+            }
+        });
+    }
+
+    private void callLoginAdherent(String login, String password) {
+        ServiceWeb.callLoginAdherent(login, password, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
+                final String retourServiceWeb = response.body().string();
+
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        call.cancel();
-                    }
+                    public void run() {
+                        if (!response.isSuccessful()) {
+                            Functions.getToast(context, "Erreur service web (code " + response.code() + ")");
+                            return;
+                        }
 
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
-                        final String retourServiceWeb = response.body().string();
+                        if (retourServiceWeb.equals("\"\"")) {
+                            Functions.getToast(context, "login ou mot de passe incorrect");
+                            return;
+                        }
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!response.isSuccessful()) {
-                                    Functions.getToast(context, "Erreur service web (code " + response.code() + ")");
-                                    return;
-                                }
+                        try {
+                            Gson gson = new Gson();
+                            Adherent adherent = gson.fromJson(retourServiceWeb, Adherent.class);
 
-                                if (retourServiceWeb.equals("\"\"")) {
-                                    Functions.getToast(context, "login ou mot de passe incorrect");
-                                    return;
-                                }
+                            // Ajoute un adherent à ma session
+                            Session.setAdherent(adherent);
+                            Session.setId(sessionId);
 
-                                try {
-                                    Gson gson = new Gson();
-                                    Adherent adherent = gson.fromJson(retourServiceWeb, Adherent.class);
-
-                                    // Ajoute un adherent à ma session
-                                    Session.setAdherent(adherent);
-                                    Session.setId(sessionId);
-
-                                    // redirige vers notre activity principale
-                                    Intent intent = new Intent(context, HomeActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } catch (Exception ex) {
-                                    Log.e("Erreur MainActivity", ex.getMessage());
-                                }
-                            }
-                        });
+                            // redirige vers notre activity principale
+                            Intent intent = new Intent(context, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } catch (Exception ex) {
+                            Log.e("Erreur MainActivity", ex.getMessage());
+                        }
                     }
                 });
             }

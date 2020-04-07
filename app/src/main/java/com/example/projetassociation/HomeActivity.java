@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         // Initialise la gestion des fragments
         initFragments();
 
-        // Fragment de démarrage
+        // Fragment de démarrage Home
         index = 0;
         replaceFragment(homeFragment);
     }
@@ -83,11 +83,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        Fragment fragment;
 
         switch (id) {
             case R.id.action_quitter:
-                finish();
+                finish(); // on quitte l'application
                 break;
             case R.id.action_compte:
                 index = 0;
@@ -95,12 +94,13 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.action_sorties:
                 index = 1;
+                // appel service web afin de récupérer les sorties pour une association
                 callGetSorties(adherent.getIdAssociation());
                 break;
         }
 
-        fragment = fragments.get(index);
-        replaceFragment(fragment);
+        // on affiche le fragment sélectionné
+        replaceFragment(fragments.get(index));
         return true;
     }
 
@@ -111,9 +111,10 @@ public class HomeActivity extends AppCompatActivity {
 
         // On ajoute nos fragments dans une list de fragments
         fragments = new ArrayList<>();
-        fragments.add(homeFragment);
-        fragments.add(sortiesFragment);
+        fragments.add(homeFragment);    // index 0
+        fragments.add(sortiesFragment); // index 1
 
+        // Initialize mon gestionnaire de fragments
         fragmentManager = getFragmentManager();
     }
 
@@ -158,10 +159,10 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
                 final String retourServiceWeb = response.body().string();
 
-                 runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(!response.isSuccessful()) {
+                        if (!response.isSuccessful()) {
                             Functions.getToast(context, "Erreur service web (code " + response.code() + ")");
                             return;
                         }
@@ -170,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
                             Gson gson = new Gson();
 
                             //Matching du flux json qui vient du service web en objet Sorties
-                            Sorties sorties = gson.fromJson(retourServiceWeb,Sorties.class);
+                            Sorties sorties = gson.fromJson(retourServiceWeb, Sorties.class);
                             sortiesFragment.loadSorties(sorties, context);
 
                         } catch (Exception ex) {
