@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
                 setData();
 
                 // on enregistre en bdd via le service web
-                callUpdateAdherent(adherent.getIdAdherent(), email, telephone, password);
+                callUpdateAdherent(adherent.getIdAdherent(), email, telephone, password, "");
 
                 // on bascule sur la vue précédente - mode TextView
                 viewSwitcher.showPrevious();
@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
         btnCrediterCompte.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openCustomAlertDialog();
             }
         });
 
@@ -162,8 +162,50 @@ public class HomeFragment extends Fragment {
         btnCrediterCompte = view.findViewById(R.id.btnCrediterCompte);
     }
 
-    private void callUpdateAdherent(int idAdherent, String email, String telephone, String password) {
-        ServiceWeb.callUpdateAdherent(idAdherent, email, telephone, password, new Callback() {
+    private void openCustomAlertDialog(){
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+
+        alertDialogBuilder.setTitle("Créditer compte");
+
+        LayoutInflater li = LayoutInflater.from(getContext());
+        View view = li.inflate(R.layout.custom_crediter_compte, null);
+
+        final EditText txtMontant = view.findViewById(R.id.txtMontant);
+
+        alertDialogBuilder.setView(view);
+
+        alertDialogBuilder.setPositiveButton("Valider",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        // on récupère le montant
+                        String montant = txtMontant.getText().toString().trim();
+                        // maj de l'objet adhérent
+                        adherent.setSolde(adherent.getSolde() + Double.parseDouble(montant));
+                        // on enregistre en session
+                        Session.setAdherent(adherent);
+
+                        // maj en bdd
+                        callUpdateAdherent(adherent.getIdAdherent(), "", "", "", montant);
+
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("Fermer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void callUpdateAdherent(int idAdherent, String email, String telephone, String password, String solde) {
+        ServiceWeb.callUpdateAdherent(idAdherent, Session.getId(), email, telephone, password, solde, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 call.cancel();

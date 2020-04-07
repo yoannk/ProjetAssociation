@@ -48,15 +48,17 @@ public class ServiceWeb {
         client.newCall(request).enqueue(callback);
     }
 
-    public static void callUpdateAdherent(int idAdherent, String email, String telephone, String password, Callback callback) {
+    public static void callUpdateAdherent(int idAdherent, String idSession, String email, String telephone, String password, String solde, Callback callback) {
         String url = Constants.urlSW + "UpdateAdherent";
 
         // POST request
         RequestBody formBody = new FormBody.Builder()
                 .add("idAdherent", "" + idAdherent)
+                .add("idsession", idSession)
                 .add("email", email)
                 .add("telephone", telephone)
                 .add("password", password)
+                .add("solde", solde)
                 .build();
 
         Request request = new Request.Builder()
