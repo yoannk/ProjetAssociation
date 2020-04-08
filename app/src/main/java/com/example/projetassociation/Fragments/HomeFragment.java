@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import android.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +15,10 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.example.projetassociation.Entities.Adherent;
-import com.example.projetassociation.Entities.Sorties;
-import com.example.projetassociation.HomeActivity;
 import com.example.projetassociation.R;
 import com.example.projetassociation.Utilities.Functions;
 import com.example.projetassociation.Utilities.ServiceWeb;
 import com.example.projetassociation.Utilities.Session;
-import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -96,7 +92,7 @@ public class HomeFragment extends Fragment {
                 setData();
 
                 // on enregistre en bdd via le service web
-                callUpdateAdherent(adherent.getIdAdherent(), email, telephone, password, "");
+                callUpdateAdherent(email, telephone, password, "");
 
                 // on bascule sur la vue précédente - mode TextView
                 viewSwitcher.showPrevious();
@@ -187,7 +183,7 @@ public class HomeFragment extends Fragment {
                         Session.setAdherent(adherent);
 
                         // maj en bdd
-                        callUpdateAdherent(adherent.getIdAdherent(), "", "", "", montant);
+                        callUpdateAdherent("", "", "", montant);
 
                         dialog.cancel();
                     }
@@ -204,8 +200,8 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void callUpdateAdherent(int idAdherent, String email, String telephone, String password, String solde) {
-        ServiceWeb.callUpdateAdherent(idAdherent, Session.getId(), email, telephone, password, solde, new Callback() {
+    private void callUpdateAdherent(String email, String telephone, String password, String solde) {
+        ServiceWeb.callUpdateAdherent(Session.getId(), email, telephone, password, solde, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 call.cancel();
