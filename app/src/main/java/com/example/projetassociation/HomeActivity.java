@@ -148,7 +148,7 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void callGetSorties(int idAssociation) {
+    public void callGetSorties(int idAssociation) {
         ServiceWeb.callGetSorties(idAssociation, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -177,6 +177,32 @@ public class HomeActivity extends AppCompatActivity {
                         } catch (Exception ex) {
                             Log.e("Erreur callGetSorties", ex.getMessage());
                         }
+                    }
+                });
+            }
+        });
+    }
+
+    public void callInscriptionSortieAdherent(int idSortie, int idAssociation) {
+        ServiceWeb.callInscriptionSortieAdherent(Session.getId(), idSortie, idAssociation, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull final Response response) throws IOException {
+                final String retourServiceWeb = response.body().string();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!response.isSuccessful()) {
+                            Functions.getToast(context, "Erreur service web (code " + response.code() + ")");
+                            return;
+                        }
+
+                        Functions.getToast(context, retourServiceWeb);
                     }
                 });
             }

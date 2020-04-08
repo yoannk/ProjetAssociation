@@ -2,12 +2,15 @@ package com.example.projetassociation.Entities;
 
 public class Sortie {
     private int idAssociation;
+    private int idSortie;
     private String nom;
     private double prix;
     private String photo;
     private String description;
     private String date;
     private boolean statut;
+    private int nbinscrits;
+    private int capaciteMaximum;
 
     public int getIdAssociation() {
         return idAssociation;
@@ -15,6 +18,14 @@ public class Sortie {
 
     public void setIdAssociation(int idAssociation) {
         this.idAssociation = idAssociation;
+    }
+
+    public int getIdSortie() {
+        return idSortie;
+    }
+
+    public void setIdSortie(int idSortie) {
+        this.idSortie = idSortie;
     }
 
     public String getNom() {
@@ -63,5 +74,21 @@ public class Sortie {
 
     public void setStatut(boolean statut) {
         this.statut = statut;
+    }
+
+    public int getNbinscrits() {
+        return nbinscrits;
+    }
+
+    public void setNbinscrits(int nbinscrits) {
+        this.nbinscrits = nbinscrits;
+    }
+
+    public int getCapaciteMaximum() {
+        return capaciteMaximum;
+    }
+
+    public void setCapaciteMaximum(int capaciteMaximum) {
+        this.capaciteMaximum = capaciteMaximum;
     }
 }

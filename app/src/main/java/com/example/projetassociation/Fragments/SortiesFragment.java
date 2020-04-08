@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projetassociation.Entities.Sortie;
 import com.example.projetassociation.Entities.Sorties;
+import com.example.projetassociation.HomeActivity;
 import com.example.projetassociation.R;
 import com.example.projetassociation.Utilities.Session;
 
@@ -151,7 +152,8 @@ public class SortiesFragment extends Fragment {
             btnInscription.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    // appel du service web au niveau HomeActivity
+                    ((HomeActivity) getActivity()).callInscriptionSortieAdherent(sortie.getIdSortie(), sortie.getIdAssociation());
                 }
             });
         }
@@ -175,9 +177,9 @@ public class SortiesFragment extends Fragment {
         rcwSorties.setAdapter(recyclerViewAdapter);
     }
 
-    private void openCustomAlertDialog(Sortie sortie){
+    private void openCustomAlertDialog(final Sortie sortie) {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
 
         alertDialogBuilder.setTitle("Detail sortie");
 
@@ -193,10 +195,10 @@ public class SortiesFragment extends Fragment {
 
         txtNom.setText(sortie.getNom());
         txtDescription.setText(sortie.getDescription());
-        txtDate.setText(sortie.getDate());
-        txtPrix.setText("" + sortie.getPrix() + " €");
-        //txtCapacite.setText(sortie.getNom());
-        //txtInscris.setText(sortie.getNom());
+        txtDate.setText("Date : " + sortie.getDate());
+        txtPrix.setText("Prix : " + sortie.getPrix() + " €");
+        txtCapacite.setText("Capacité maximum : " + sortie.getCapaciteMaximum());
+        txtInscris.setText("Nombre d'inscrits : " + sortie.getNbinscrits());
 
         ImageView imageView = view.findViewById(R.id.imgPhoto);
 
@@ -206,7 +208,8 @@ public class SortiesFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int arg1) {
-
+                        // appel du service web au niveau HomeActivity
+                        ((HomeActivity) getActivity()).callInscriptionSortieAdherent(sortie.getIdSortie(), sortie.getIdAssociation());
                         dialog.cancel();
                     }
                 });

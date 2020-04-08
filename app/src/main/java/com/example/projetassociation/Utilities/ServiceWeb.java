@@ -53,11 +53,29 @@ public class ServiceWeb {
 
         // POST request
         RequestBody formBody = new FormBody.Builder()
-                .add("idsession", idSession)
+                .add("idSession", idSession)
                 .add("email", email)
                 .add("telephone", telephone)
                 .add("password", password)
                 .add("solde", solde)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void callInscriptionSortieAdherent(String idSession, int idSortie, int idAssociation, Callback callback) {
+        String url = Constants.urlSW + "InscriptionSortieAdherent";
+
+        // POST request
+        RequestBody formBody = new FormBody.Builder()
+                .add("idSession", idSession)
+                .add("idSortie", "" + idSortie)
+                .add("idAssociation", "" + idAssociation)
                 .build();
 
         Request request = new Request.Builder()
