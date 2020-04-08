@@ -86,14 +86,14 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
 
-                        if (retourServiceWeb.equals("\"\"")) {
-                            Functions.getToast(context, "login ou mot de passe incorrect");
-                            return;
-                        }
-
                         try {
                             Gson gson = new Gson();
                             Adherent adherent = gson.fromJson(retourServiceWeb, Adherent.class);
+
+                            if(adherent.getNom() == null) {
+                                Functions.getToast(context, "login ou mot de passe incorrect");
+                                return;
+                            }
 
                             // Ajoute un adherent à ma session
                             Session.setAdherent(adherent);
