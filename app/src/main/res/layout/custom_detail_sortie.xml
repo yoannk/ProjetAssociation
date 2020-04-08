@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imgSortie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/txtNom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nom" />
+
+    <TextView
+        android:id="@+id/txtDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description" />
+
+    <TextView
+        android:id="@+id/txtDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date" />
+
+    <TextView
+        android:id="@+id/txtPrix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Prix" />
+
+    <TextView
+        android:id="@+id/txtCapacite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capacite" />
+
+    <TextView
+        android:id="@+id/txtInscris"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre inscris" />
+
+    <Button
+        android:id="@+id/brnIscriptionDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Je m'inscris" />
+</LinearLayout>

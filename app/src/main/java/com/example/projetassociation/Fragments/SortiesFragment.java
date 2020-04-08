@@ -1,6 +1,8 @@
 package com.example.projetassociation.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.app.Fragment;
@@ -8,6 +10,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.projetassociation.Entities.Sortie;
 import com.example.projetassociation.Entities.Sorties;
 import com.example.projetassociation.R;
+import com.example.projetassociation.Utilities.Session;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -114,24 +119,45 @@ public class SortiesFragment extends Fragment {
         public final TextView txtPrix;
         public final TextView txtDate;
         public final ImageView imgPhoto;
+        public final Button btnDetails;
+        public final Button btnInscription;
 
         public SortieHolder(@NonNull View itemView) {
             super(itemView);
 
+            // on initialise les widgets qui sont dans le layout
             txtNom = itemView.findViewById(R.id.txtNom);
             txtPrix = itemView.findViewById(R.id.txtPrix);
             txtDate = itemView.findViewById(R.id.txtDate);
             imgPhoto = itemView.findViewById(R.id.imgPhoto);
+            btnDetails = itemView.findViewById(R.id.btnDetail);
+            btnInscription = itemView.findViewById(R.id.btnInscription);
         }
 
-        public void setSortie(Sortie sortie) {
+        public void setSortie(final Sortie sortie) {
+            // le match des données avec les widgets
             txtNom.setText(sortie.getNom());
             txtPrix.setText("" + sortie.getPrix() + " €");
             txtDate.setText("");
             //imgPhoto.setImageDrawable();
+
+            btnDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openCustomAlertDialog(sortie);
+                }
+            });
+
+            btnInscription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 
+    // appel depuis HomeActivity
     public void loadSorties(Sorties sorties, Context context) {
         this.context = context;
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(sorties);
@@ -147,5 +173,52 @@ public class SortiesFragment extends Fragment {
 
         rcwSorties.setLayoutManager(layoutManager);
         rcwSorties.setAdapter(recyclerViewAdapter);
+    }
+
+    private void openCustomAlertDialog(Sortie sortie){
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+
+        alertDialogBuilder.setTitle("Detail sortie");
+
+        LayoutInflater li = LayoutInflater.from(getContext());
+        View view = li.inflate(R.layout.custom_detail_sortie, null);
+
+        TextView txtNom = view.findViewById(R.id.txtNom);
+        TextView txtDescription = view.findViewById(R.id.txtDescription);
+        TextView txtDate = view.findViewById(R.id.txtDate);
+        TextView txtPrix = view.findViewById(R.id.txtPrix);
+        TextView txtCapacite = view.findViewById(R.id.txtCapacite);
+        TextView txtInscris = view.findViewById(R.id.txtInscris);
+
+        txtNom.setText(sortie.getNom());
+        txtDescription.setText(sortie.getDescription());
+        txtDate.setText(sortie.getDate());
+        txtPrix.setText("" + sortie.getPrix() + " €");
+        //txtCapacite.setText(sortie.getNom());
+        //txtInscris.setText(sortie.getNom());
+
+        ImageView imageView = view.findViewById(R.id.imgPhoto);
+
+        alertDialogBuilder.setView(view);
+
+        alertDialogBuilder.setPositiveButton("Valider",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int arg1) {
+
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("Fermer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
