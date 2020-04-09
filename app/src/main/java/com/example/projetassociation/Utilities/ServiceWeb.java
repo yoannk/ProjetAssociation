@@ -12,7 +12,7 @@ public class ServiceWeb {
     private static OkHttpClient client = new OkHttpClient();
 
     public static void callGetSorties(int idAssociation, Callback callback) {
-        String url = Constants.urlSW + "GetSorties";
+        String url = Constants.URL_SW + "GetSorties";
 
         HttpUrl.Builder httpBuilder = HttpUrl.parse(url).newBuilder();
         httpBuilder.addQueryParameter("idAssociation", "" + idAssociation);
@@ -23,7 +23,7 @@ public class ServiceWeb {
     }
 
     public static void callLoginAdherent(String login, String password, String idSession, Callback callback) {
-        String url = Constants.urlSW + "LoginAdherent";
+        String url = Constants.URL_SW + "LoginAdherent";
 
         // POST request
         RequestBody formBody = new FormBody.Builder()
@@ -41,7 +41,7 @@ public class ServiceWeb {
     }
 
     public static void callGetSessionId(Callback callback) {
-        String url = Constants.urlSW + "GetId";
+        String url = Constants.URL_SW + "GetId";
 
         Request request = new Request.Builder().url(url).build();
 
@@ -49,7 +49,7 @@ public class ServiceWeb {
     }
 
     public static void callUpdateAdherent(String idSession, String email, String telephone, String password, String solde, Callback callback) {
-        String url = Constants.urlSW + "UpdateAdherent";
+        String url = Constants.URL_SW + "UpdateAdherent";
 
         // POST request
         RequestBody formBody = new FormBody.Builder()
@@ -69,7 +69,7 @@ public class ServiceWeb {
     }
 
     public static void callInscriptionSortieAdherent(String idSession, int idSortie, int idAssociation, Callback callback) {
-        String url = Constants.urlSW + "InscriptionSortieAdherent";
+        String url = Constants.URL_SW + "InscriptionSortieAdherent";
 
         // POST request
         RequestBody formBody = new FormBody.Builder()
